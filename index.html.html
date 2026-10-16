@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thiết kế website bán hàng cho doanh nghiệp nhỏ</title>
+<script>document.documentElement.className+=' js'</script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F6FB;--surface:#fff;--ink:#0E1B3D;--mute:#56627F;--line:#D5DCEB;--blue:#2447F5;--on-blue:#fff;--sig:#FFC736;--on-sig:#0E1B3D;--ease:cubic-bezier(.22,1,.36,1);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B1226;--surface:#131C38;--ink:#EEF2FF;--mute:#9AA6C6;--line:#27345C;--blue:#6C86FF;--on-blue:#0B1226;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0B1226;--surface:#131C38;--ink:#EEF2FF;--mute:#9AA6C6;--line:#27345C;--blue:#6C86FF;--on-blue:#0B1226;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 "Be Vietnam Pro",system-ui,"Segoe UI",sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+section{padding:72px 0}
+h1,h2,h3{line-height:1.15;margin:0;letter-spacing:-.02em}
+h1{font-size:clamp(34px,6.2vw,62px);font-weight:800;max-width:15ch}
+h2{font-size:clamp(26px,4vw,38px);font-weight:800;margin-bottom:12px}
+h3{font-size:19px;font-weight:700;margin-bottom:6px}
+p{margin:0 0 12px;max-width:62ch}
+.mute{color:var(--mute)}
+.btn{display:inline-block;padding:14px 24px;border-radius:10px;font-weight:700;text-decoration:none;border:2px solid var(--blue);background:var(--blue);color:var(--on-blue);cursor:pointer;font-size:16px;font-family:inherit}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--sig);outline-offset:3px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0;gap:12px}
+nav b{font-weight:800;font-size:18px}
+nav a.btn{padding:9px 16px;font-size:15px}
+.hero{padding:36px 0 72px}
+.hero p.lead{font-size:19px;margin:18px 0 26px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+/* hero scene */
+.top{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center}
+.top h1{font-size:clamp(32px,5vw,54px)}
+.scene{position:relative;perspective:900px}
+.dv{width:100%;height:auto;display:block;transform:rotateY(calc(var(--px,0)*-6deg)) rotateX(calc(var(--py,0)*5deg));transition:transform .6s var(--ease)}
+.chip{position:absolute;display:flex;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:13px;font-weight:700;line-height:1.3;box-shadow:0 16px 30px -14px rgba(14,27,61,.5);translate:calc(var(--px,0)*16px) calc(var(--py,0)*12px);transition:translate .7s var(--ease)}
+.chip i{width:9px;height:9px;border-radius:50%;background:#22A06B}
+.chip.a{left:-3%;top:10%}
+.chip.b{left:3%;bottom:4%}
+.k1{animation:b1 9s infinite}.k2{animation:b2 9s infinite}.k3{animation:b3 9s infinite}
+@keyframes b1{0%,5%{opacity:0;transform:translateY(10px)}10%,88%{opacity:1;transform:none}96%,100%{opacity:0}}
+@keyframes b2{0%,20%{opacity:0;transform:translateY(10px)}26%,88%{opacity:1;transform:none}96%,100%{opacity:0}}
+@keyframes b3{0%,36%{opacity:0;transform:translateY(10px)}42%,88%{opacity:1;transform:none}96%,100%{opacity:0}}
+/* before/after demo */
+.demo{margin-top:48px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.tabs button{font:700 15px "Be Vietnam Pro",sans-serif;padding:9px 16px;border-radius:999px;border:2px solid var(--line);background:none;color:var(--ink);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.stage{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:start}
+.mock{border:1px solid var(--line);border-radius:10px;overflow:hidden;min-height:250px;background:#fff;color:#1a1a1a;font-size:13px;line-height:1.4}
+.bar{height:22px;background:#e6e9f0;display:flex;gap:5px;align-items:center;padding:0 10px}
+.bar i{width:8px;height:8px;border-radius:50%;background:#b5bccd}
+.bad{padding:10px;background:#e9e2c8;font-family:"Times New Roman",serif}
+.bad .m{background:#c33;color:#fff;padding:4px 8px;font-weight:700;text-align:center;font-size:12px}
+.bad .row{display:flex;gap:6px;margin:8px 0}
+.bad .row span{flex:1;background:#b9d;height:46px;border:2px solid #777}
+.bad small{display:block;color:#555}
+.good{padding:22px 18px;font-family:"Be Vietnam Pro",sans-serif}
+.good strong{display:block;font-size:22px;line-height:1.2;margin:6px 0 8px;color:#0E1B3D}
+.good .b{display:inline-block;background:#2447F5;color:#fff;padding:9px 16px;border-radius:8px;font-weight:700;margin:6px 0 14px}
+.good .row{display:flex;gap:8px}
+.good .row span{flex:1;background:#eef1ff;border-radius:8px;padding:8px;font-size:12px;color:#33406a}
+.mock[hidden]{display:none}
+.notes{list-style:none;margin:0;padding:0}
+.notes li{padding:9px 0 9px 28px;position:relative;border-bottom:1px solid var(--line)}
+.notes li::before{position:absolute;left:0;font-weight:800}
+.notes.x li::before{content:"✕";color:#d33}
+.notes.v li::before{content:"✓";color:var(--blue)}
+/* code demo */
+.dev{display:grid;grid-template-columns:1fr 1.15fr;gap:36px;align-items:center}
+.ed{background:#070C1C;color:#EEF2FF;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 20px 40px -24px rgba(14,27,61,.6)}
+.ed .bar{background:#131C38;height:32px;color:#9AA6C6;font:12px ui-monospace,Menlo,Consolas,monospace}
+.ed .bar span{margin-left:auto;margin-right:auto;padding-right:40px}
+.ed pre{margin:0;padding:1.1em;min-height:22.6em;font:14px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word}
+.c-t{color:#7DA2FF}.c-a{color:#FFC736}.c-s{color:#8FE3B0}.c-x{color:#EEF2FF}.c-sel{color:#C6A8FF}.c-c{color:#7B88AB}
+.car{display:inline-block;width:8px;height:1.15em;background:#FFC736;vertical-align:text-bottom;margin-left:1px;animation:caret 1s steps(1) infinite}
+@keyframes caret{50%{opacity:0}}
+.stg{list-style:none;margin:0;padding:16px 8px 18px;display:flex;border-top:1px solid #27345C;background:#0B1226}
+.stg li{flex:1;text-align:center;font-size:12px;line-height:1.3;color:#7B88AB;position:relative;padding-top:22px;transition:color .4s}
+.stg li::before{content:'';position:absolute;top:0;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#27345C;z-index:1;transition:background .4s,box-shadow .4s}
+.stg li:not(:last-child)::after{content:'';position:absolute;top:5px;left:50%;width:100%;height:2px;background:#27345C;transition:background .6s}
+.stg li.on{color:#EEF2FF;font-weight:700}
+.stg li.on::before{background:#FFC736}
+.stg li.cur::before{box-shadow:0 0 0 5px rgba(255,199,54,.28)}
+.stg li.done::after{background:#FFC736}
+@media (max-width:760px){.dev{grid-template-columns:1fr}}
+/* gallery */
+.wk .card{padding:0;overflow:hidden}
+.vp{height:178px;overflow:hidden;background:#fff}
+.pg{padding:12px;transition:transform 3.2s cubic-bezier(.45,0,.25,1)}
+.wk .card:hover .pg{transform:translateY(calc(178px - 100%))}
+.pg b{display:block;height:84px;border-radius:8px;background:linear-gradient(135deg,var(--a),var(--b))}
+.pg b.d{height:46px;background:#0E1B3D}
+.pg i{display:block;height:10px;width:70%;background:#0E1B3D;border-radius:3px;margin:12px 0 6px}
+.pg i.s{width:46%;height:6px;background:#B8C1DC;margin:0 0 12px}
+.pg u{display:flex;gap:8px;margin:10px 0}
+.pg u s{flex:1;height:54px;border-radius:6px;background:var(--a);opacity:.3}
+.cap{padding:16px 20px}
+@media (hover:none){.pg{animation:scr 8s ease-in-out infinite alternate}}
+@keyframes scr{to{transform:translateY(calc(178px - 100%))}}
+/* services */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:28px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px}
+.card.pick{border:2px solid var(--blue)}
+.price{font-size:30px;font-weight:800;margin:6px 0 2px}
+.card ul{padding-left:20px;margin:12px 0 0}
+.tag{display:inline-block;background:var(--sig);color:var(--on-sig);font-weight:700;font-size:13px;padding:2px 10px;border-radius:6px;margin-bottom:8px}
+/* trust */
+.tr{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.tr li{display:flex;gap:14px;align-items:flex-start}
+.tr svg{flex:none;width:28px;height:28px;margin-top:2px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tr b{display:block}
+.tr span{color:var(--mute);font-size:15px;line-height:1.5}
+/* process */
+.steps{counter-reset:s;display:grid;gap:0;margin-top:24px;border-left:3px solid var(--line);margin-left:6px;position:relative}
+.steps div{counter-increment:s;padding:0 0 26px 28px;position:relative}
+.steps div::before{content:counter(s);position:absolute;left:-17px;top:0;width:31px;height:31px;border-radius:50%;background:var(--blue);color:var(--on-blue);font-weight:800;display:grid;place-items:center;font-size:15px}
+.steps p{margin:0}
+.steps::before{content:"";position:absolute;left:-3px;top:0;bottom:0;width:3px;background:var(--blue);transform-origin:top;transform:scaleY(0);transition:transform 1.6s ease}
+.steps.in::before{transform:scaleY(1)}
+/* proof */
+.proof{background:var(--ink);color:var(--bg)}
+.proof .mute{color:var(--line)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin:28px 0}
+.stats b{display:block;font-size:40px;font-weight:800;color:var(--sig)}
+blockquote{margin:0;padding-left:18px;border-left:4px solid var(--sig);max-width:60ch}
+details{border-bottom:1px solid var(--line);padding:16px 0}
+summary{font-weight:700;cursor:pointer}
+details p{margin:10px 0 0}
+.contact{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:36px 24px;text-align:center}
+.contact p{margin-left:auto;margin-right:auto}
+.contact .cta{justify-content:center;margin-top:18px}
+footer{padding:28px 0 40px;color:var(--mute);font-size:14px;text-align:center}
+@media (max-width:860px){.top{grid-template-columns:1fr}.chip.a{left:0}}
+@media (max-width:760px){section{padding:52px 0}.stage{grid-template-columns:1fr}}
+/* motion */
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes swap{from{opacity:0;transform:translateX(28px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes blink{50%{background:#ffe600;color:#c33}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(36,71,245,.55)}60%{box-shadow:0 0 0 12px rgba(36,71,245,0)}}
+.prog{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:4px;background:var(--sig);transform-origin:left;transform:scaleX(0);z-index:20}
+.hw{display:inline-block}
+.js .hw{animation:rise .75s var(--ease) both}
+.js .hero .lead{animation:rise .7s .65s both}
+.js .hero .cta{animation:rise .7s .8s both}
+.js .scene{animation:rise 1s .5s var(--ease) both}
+.js .demo{animation:rise .8s .95s both}
+.mock:not([hidden]){animation:swap .5s var(--ease)}
+.notes:not([hidden]) li{animation:rise .5s both}
+.notes li:nth-child(2){animation-delay:.12s}
+.notes li:nth-child(3){animation-delay:.24s}
+.bad .m{animation:blink 1s steps(1) infinite}
+.good .b{animation:pulse 2s infinite}
+.js .rv{opacity:0;transform:translateY(24px);filter:blur(6px);transition:opacity .7s var(--ease),transform .7s var(--ease),filter .7s var(--ease)}
+.js .rv.in{opacity:1;transform:none;filter:none}
+.card{transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-6px);box-shadow:0 16px 30px -16px rgba(14,27,61,.4)}
+.btn{transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}.prog{display:none}}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<header class="wrap">
+  <nav><b>Tuấn Nguyễn Anh · Web</b><a class="btn" href="#lien-he">Nhận tư vấn miễn phí 0902089173</a></nav>
+</header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <div class="top">
+  <div>
+    <h1>Website khiến khách hàng nhắn tin cho bạn.</h1>
+    <p class="lead mute">Tôi thiết kế website cho cửa hàng, studio và doanh nghiệp nhỏ: tải nhanh, đẹp trên điện thoại, và có nút liên hệ đặt đúng chỗ. Bạn nhận báo giá trong 24 giờ.</p>
+    <div class="cta"><a class="btn" href="#lien-he">Gửi yêu cầu cho tôi</a><a class="btn ghost" href="#bang-gia">Xem bảng giá</a></div>
+  </div>
+  <div class="scene">
+    <svg class="dv" viewBox="0 0 500 360" role="img" aria-label="Website tiệm bánh trên máy tính và cuộc trò chuyện đặt bánh trên điện thoại">
+      <defs>
+        <linearGradient id="gb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB55C"/><stop offset="1" stop-color="#F0643C"/></linearGradient>
+        <linearGradient id="gd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DDE3F2"/><stop offset="1" stop-color="#A9B4D0"/></linearGradient>
+        <filter id="sh" x="-20%" y="-300%" width="140%" height="700%"><feGaussianBlur stdDeviation="9"/></filter>
+      </defs>
+      <ellipse cx="240" cy="334" rx="215" ry="9" fill="#0E1B3D" opacity=".35" filter="url(#sh)"/>
+      <rect x="20" y="24" width="370" height="250" rx="14" fill="#0E1B3D"/>
+      <rect x="32" y="36" width="346" height="226" rx="6" fill="#fff"/>
+      <rect x="32" y="36" width="346" height="24" rx="6" fill="#F3F6FB"/>
+      <circle cx="47" cy="48" r="5" fill="#F0643C"/>
+      <text x="58" y="52" font-size="10" font-weight="800" fill="#0E1B3D">Lúa Mới</text>
+      <rect x="262" y="46" width="28" height="5" rx="2.5" fill="#B8C1DC"/><rect x="298" y="46" width="28" height="5" rx="2.5" fill="#B8C1DC"/><rect x="336" y="41" width="34" height="14" rx="7" fill="#2447F5"/>
+      <rect x="44" y="70" width="322" height="104" rx="10" fill="url(#gb)"/>
+      <text x="58" y="100" font-size="15" font-weight="800" fill="#fff">Bánh nướng tươi</text>
+      <text x="58" y="118" font-size="15" font-weight="800" fill="#fff">mỗi sáng</text>
+      <rect x="58" y="130" width="88" height="23" rx="11.5" fill="#fff"/>
+      <text x="70" y="145" font-size="10" font-weight="700" fill="#0E1B3D">Đặt qua Zalo</text>
+      <circle cx="312" cy="122" r="42" fill="#FFE2B8"/><circle cx="312" cy="122" r="31" fill="#E9A15B"/><circle cx="312" cy="122" r="21" fill="#FFE2B8"/><circle cx="312" cy="122" r="7" fill="#F0643C"/>
+      <g fill="#F3F6FB"><rect x="44" y="186" width="102" height="66" rx="8"/><rect x="154" y="186" width="102" height="66" rx="8"/><rect x="264" y="186" width="102" height="66" rx="8"/></g>
+      <g fill="#FFB55C"><circle cx="62" cy="204" r="9"/><circle cx="172" cy="204" r="9"/><circle cx="282" cy="204" r="9"/></g>
+      <g fill="#B8C1DC"><rect x="56" y="226" width="62" height="6" rx="3"/><rect x="166" y="226" width="62" height="6" rx="3"/><rect x="276" y="226" width="62" height="6" rx="3"/></g>
+      <path d="M4 274h402l-14 14a12 12 0 01-9 4H27a12 12 0 01-9-4z" fill="url(#gd)"/>
+      <rect x="170" y="274" width="70" height="6" rx="3" fill="#8E99B8"/>
+      <rect x="340" y="100" width="140" height="240" rx="22" fill="#0E1B3D"/>
+      <rect x="347" y="107" width="126" height="226" rx="17" fill="#fff"/>
+      <path d="M347 124a17 17 0 0117-17h92a17 17 0 0117 17v19H347z" fill="#2447F5"/>
+      <circle cx="365" cy="126" r="8" fill="#FFC736"/>
+      <text x="379" y="130" font-size="10" font-weight="700" fill="#fff">Tiệm Lúa Mới</text>
+      <g class="k1"><rect x="355" y="156" width="92" height="34" rx="10" fill="#EEF1FF"/><text x="363" y="170" font-size="9" fill="#0E1B3D">Cho mình đặt</text><text x="363" y="182" font-size="9" fill="#0E1B3D">2 hộp bánh nhé!</text></g>
+      <g class="k2"><rect x="381" y="200" width="84" height="34" rx="10" fill="#2447F5"/><text x="389" y="214" font-size="9" fill="#fff">Dạ được ạ,</text><text x="389" y="226" font-size="9" fill="#fff">giao sau 2 giờ.</text></g>
+      <g class="k3"><rect x="355" y="244" width="62" height="22" rx="10" fill="#EEF1FF"/><text x="364" y="259" font-size="9" fill="#0E1B3D">Chốt nhé!</text></g>
+      <rect x="355" y="302" width="110" height="22" rx="11" fill="#F3F6FB"/>
+    </svg>
+    <div class="chip a k2"><i></i>Đơn mới từ Zalo</div>
+    <div class="chip b k3"><i></i>Tin nhắn tăng 3 lần</div>
+  </div>
+  </div>
+
+  <div class="demo" aria-label="So sánh trước và sau">
+    <div class="tabs">
+      <button id="t1" aria-pressed="true">Website thường gặp</button>
+      <button id="t2" aria-pressed="false">Website tôi làm</button>
+    </div>
+    <div class="stage">
+      <div>
+        <div class="mock" id="m1"><div class="bar"><i></i><i></i><i></i></div>
+          <div class="bad"><div class="m">!!! KHUYẾN MÃI SỐC !!!</div>
+            <b>Chào mừng đến với công ty chúng tôi</b>
+            <div class="row"><span></span><span></span><span></span></div>
+            <small>Chúng tôi là công ty hàng đầu, uy tín, chất lượng, giá rẻ, thành lập từ năm 2009, chuyên cung cấp nhiều loại sản phẩm...</small>
+            <small>Liên hệ: xem cuối trang</small></div></div>
+        <div class="mock" id="m2" hidden><div class="bar"><i></i><i></i><i></i></div>
+          <div class="good"><span class="mute">Tiệm bánh Lúa Mới</span>
+            <strong>Bánh nướng tươi mỗi sáng, giao tận nhà trong 2 giờ</strong>
+            <span class="b">Đặt bánh qua Zalo</span>
+            <div class="row"><span>Giao nhanh</span><span>Làm theo đơn</span><span>4,9★ từ 312 khách</span></div></div></div>
+      </div>
+      <ul class="notes x" id="n1">
+        <li>Khách không biết bạn bán gì sau 5 giây</li>
+        <li>Nút liên hệ nằm tận cuối trang</li>
+        <li>Chữ nhỏ, khó đọc trên điện thoại</li>
+      </ul>
+      <ul class="notes v" id="n2" hidden>
+        <li>Một câu nói rõ bạn bán gì và cho ai</li>
+        <li>Nút đặt hàng luôn nằm ở màn hình đầu</li>
+        <li>Đánh giá thật đặt ngay cạnh nút</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section style='padding-top:0'><div class='wrap dev'>
+  <div>
+    <h2>Mỗi dòng code đều viết riêng cho bạn</h2>
+    <p class='mute'>Không dùng mẫu dựng sẵn nặng nề. Tôi viết gọn và nhẹ để trang tải nhanh, dễ sửa về sau.</p>
+    <ul class='notes v'><li>Không plugin thừa làm chậm trang</li><li>Mã nguồn đứng tên bạn, giao cho ai cũng sửa được</li></ul>
+  </div>
+  <div class='ed'><div class='bar' aria-hidden='true'><i></i><i></i><i></i><span>index.html</span></div><pre id='code' aria-hidden='true'></pre><ol class='stg' id='stg'><li>Khảo sát</li><li>Thiết kế</li><li>Lập trình</li><li>Kiểm tra</li><li>Bàn giao</li></ol></div>
+</div></section>
+
+<section class="wk" style="padding-top:0"><div class="wrap">
+  <h2>Một số giao diện tôi đã làm</h2>
+  <p class="mute">Rê chuột vào ảnh để xem cả trang cuộn xuống. Đây là ảnh minh họa, hãy thay bằng ảnh chụp dự án thật của bạn.</p>
+  <div class="grid">
+    <div class="card"><div class="shot" style="--a:#FFB55C;--b:#F0643C" aria-hidden="true"><div class="bar"><i></i><i></i><i></i></div><div class="vp"><div class="pg"><b></b><i></i><i class="s"></i><u><s></s><s></s><s></s></u><b class="d"></b><u><s></s><s></s><s></s></u></div></div></div>
+      <div class="cap"><h3>Tiệm bánh Lúa Mới</h3><span class="mute">Website bán hàng, giao sau 3 tuần</span></div></div>
+    <div class="card"><div class="shot" style="--a:#6CCBA5;--b:#1F8A7A" aria-hidden="true"><div class="bar"><i></i><i></i><i></i></div><div class="vp"><div class="pg"><b></b><i></i><i class="s"></i><u><s></s><s></s><s></s></u><b class="d"></b><u><s></s><s></s><s></s></u></div></div></div>
+      <div class="cap"><h3>Studio yoga An Nhiên</h3><span class="mute">Website doanh nghiệp, giao sau 10 ngày</span></div></div>
+    <div class="card"><div class="shot" style="--a:#C99464;--b:#5C3D2E" aria-hidden="true"><div class="bar"><i></i><i></i><i></i></div><div class="vp"><div class="pg"><b></b><i></i><i class="s"></i><u><s></s><s></s><s></s></u><b class="d"></b><u><s></s><s></s><s></s></u></div></div></div>
+      <div class="cap"><h3>Cà phê Nhà Rang</h3><span class="mute">Trang giới thiệu, giao sau 5 ngày</span></div></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <h2>Làm việc với người làm nghề nghiêm túc</h2>
+  <p class="mute">Tôi là Minh Anh, thiết kế web tại Hà Nội. Mỗi dự án có hợp đồng, tiến độ rõ ràng và một người chịu trách nhiệm từ đầu đến cuối.</p>
+  <ul class="tr">
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><div><b>Bảo hành 30 ngày</b><span>Lỗi phát sinh sau bàn giao được sửa miễn phí.</span></div></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Đúng hẹn</b><span>Ngày giao được ghi rõ trong hợp đồng.</span></div></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><div><b>Bạn sở hữu toàn bộ</b><span>Tên miền, hosting và mã nguồn đều đứng tên bạn.</span></div></li>
+  </ul>
+</div></section>
+
+<section id="bang-gia" style="padding-top:0"><div class="wrap">
+  <h2>Chọn gói phù hợp với bạn</h2>
+  <p class="mute">Giá đã gồm thiết kế, nội dung cơ bản và hướng dẫn sử dụng. Không phí ẩn.</p>
+  <div class="grid">
+    <div class="card"><h3>Trang giới thiệu</h3><div class="price">5 triệu</div><span class="mute">1 trang, giao sau 5 ngày</span>
+      <ul><li>Hiển thị tốt trên điện thoại</li><li>Nút gọi, Zalo, bản đồ</li><li>Tên miền và hosting năm đầu</li></ul></div>
+    <div class="card pick"><span class="tag">Được chọn nhiều nhất</span><h3>Website doanh nghiệp</h3><div class="price">12 triệu</div><span class="mute">Đến 6 trang, giao sau 10 ngày</span>
+      <ul><li>Mọi thứ trong gói đầu tiên</li><li>Trang dịch vụ, bài viết, liên hệ</li><li>Chuẩn SEO cơ bản để lên Google</li></ul></div>
+    <div class="card"><h3>Website bán hàng</h3><div class="price">Từ 20 triệu</div><span class="mute">Giao sau 3 đến 4 tuần</span>
+      <ul><li>Giỏ hàng và thanh toán online</li><li>Quản lý sản phẩm, đơn hàng</li><li>Đào tạo bạn tự cập nhật</li></ul></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <h2>Làm việc cùng tôi diễn ra thế nào</h2>
+  <div class="steps">
+    <div><h3>Bạn kể về việc kinh doanh</h3><p class="mute">Một cuộc gọi 20 phút, miễn phí. Tôi hỏi về khách hàng và mục tiêu của bạn.</p></div>
+    <div><h3>Tôi gửi báo giá và bản phác thảo</h3><p class="mute">Trong 24 giờ. Bạn xem trước giao diện rồi mới quyết định.</p></div>
+    <div><h3>Tôi xây dựng, bạn góp ý</h3><p class="mute">Bạn có link xem thử mỗi vài ngày. Được sửa đến khi hài lòng.</p></div>
+    <div><h3>Ra mắt và hỗ trợ 30 ngày</h3><p class="mute">Có lỗi hay cần chỉnh sửa nhỏ, tôi xử lý miễn phí.</p></div>
+  </div>
+</div></section>
+
+<section class="proof"><div class="wrap">
+  <h2>Kết quả khách hàng nhận được</h2>
+  <div class="stats">
+    <div><b><span data-n="40">40</span>+</b><span class="mute">website đã bàn giao</span></div>
+    <div><b>&lt; <span data-n="2">2</span> giây</b><span class="mute">thời gian tải trang trung bình</span></div>
+    <div><b><span data-n="3">3</span> lần</b><span class="mute">số tin nhắn tăng sau 2 tháng (tiệm bánh Lúa Mới)</span></div>
+  </div>
+  <blockquote>“Trước đây khách phải hỏi giá từng người. Giờ họ xem bảng giá trên web rồi mới nhắn, nên chốt đơn nhanh hơn nhiều.”<br><span class="mute">Chị Lan, chủ tiệm bánh Lúa Mới (nội dung mẫu, hãy thay bằng lời khách thật)</span></blockquote>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Câu hỏi thường gặp</h2>
+  <details><summary>Tôi không rành công nghệ, có làm được không?</summary><p class="mute">Được. Tôi lo phần kỹ thuật và hướng dẫn bạn tự sửa nội dung bằng video ngắn.</p></details>
+  <details><summary>Tôi phải trả trước bao nhiêu?</summary><p class="mute">Đặt cọc 40%, phần còn lại trả khi bạn nghiệm thu và hài lòng.</p></details>
+  <details><summary>Website có lên được Google không?</summary><p class="mute">Tôi tối ưu tốc độ, tiêu đề và cấu trúc trang để Google dễ hiểu website của bạn. Thứ hạng cụ thể còn phụ thuộc vào cạnh tranh và nội dung.</p></details>
+  <details><summary>Sau khi bàn giao, tôi có sở hữu website không?</summary><p class="mute">Có. Tên miền, hosting và mã nguồn đều đứng tên bạn.</p></details>
+</div></section>
+
+<section id="lien-he" style="padding-top:0"><div class="wrap">
+  <div class="contact">
+    <h2>Kể tôi nghe về dự án của bạn</h2>
+    <p class="mute">Gửi vài dòng về việc kinh doanh của bạn. Tôi sẽ trả lời kèm báo giá trong 24 giờ.</p>
+    <div class="cta">
+      <a class="btn" href="https://zalo.me/0902089173">Nhắn Zalo</a>
+      <a class="btn ghost" href="mailto:tuannguyenanh2102@gmail.com">Gửi email</a>
+      <a class="btn ghost" href="tel:0902089173">Gọi 0902 089 173</a>
+    </div>
+  </div>
+</div></section>
+</main>
+<footer>© 2026 Tuấn Nguyễn Anh · Thiết kế website tại Hà Nội</footer>
+
+<script>
+(function(){
+  var t1=document.getElementById('t1'),t2=document.getElementById('t2');
+  var ids=['m1','n1','m2','n2'].map(function(i){return document.getElementById(i)});
+  function show(after){
+    ids[0].hidden=ids[1].hidden=after; ids[2].hidden=ids[3].hidden=!after;
+    t1.setAttribute('aria-pressed',String(!after)); t2.setAttribute('aria-pressed',String(after));
+  }
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches,auto=!reduce,state=false;
+  t1.onclick=function(){auto=false;show(false)}; t2.onclick=function(){auto=false;show(true)};
+  setInterval(function(){if(auto){state=!state;show(state)}},3800);
+
+  var pg=document.getElementById('prog');
+  function sc(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;pg.style.transform='scaleX('+(m>0?h.scrollTop/m:0)+')'}
+  addEventListener('scroll',sc,{passive:true});sc();
+
+  var CODE=[['t','<section'],['a',' class'],['x','='],['s','"hero"'],['t','>\n  <h1>'],['x','Bánh nướng tươi mỗi sáng'],['t','</h1>\n  <a'],['a',' class'],['x','='],['s','"btn"'],['t','>'],['x','Đặt bánh qua Zalo'],['t','</a>\n</section>\n\n'],['sel','.btn'],['x',' {\n  '],['a','background'],['x',': '],['s','#2447F5'],['x',';\n  '],['a','border-radius'],['x',': '],['s','10px'],['x',';\n  '],['a','transition'],['x',': '],['s','transform .2s'],['x',';\n}\n\n'],['c','/* Xong. Trang tải trong 1,8 giây. */']];
+  var TOTAL=CODE.reduce(function(a,t){return a+t[1].length},0),pre=document.getElementById('code'),pos=0;
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function draw(n,caret){var h='',left=n;for(var i=0;i<CODE.length&&left>0;i++){var s=CODE[i][1].slice(0,left);left-=s.length;h+='<span class="c-'+CODE[i][0]+'">'+esc(s)+'</span>'}pre.innerHTML=h+(caret?'<i class="car"></i>':'')}
+  var stg=document.querySelectorAll('#stg li'),T=[0,.2,.45,.75,1];
+  function stages(){var r=-1,i;for(i=0;i<5;i++)if(pos>0&&pos/TOTAL>=T[i])r=i;for(i=0;i<5;i++)stg[i].className=i<r?'on done':i===r?'on cur':''}
+  function step(){if(pos<TOTAL){pos+=1;draw(pos,true);stages();setTimeout(step,16+Math.random()*34)}else{setTimeout(function(){pos=0;step()},3500)}}
+  if(reduce||!('IntersectionObserver' in window)){pos=TOTAL;draw(TOTAL,false);stages()}
+  else{new IntersectionObserver(function(es,o){if(es[0].isIntersecting){o.disconnect();step()}}).observe(pre)}
+
+  var hero=document.querySelector('.hero'),scn=document.querySelector('.scene'),q=0;
+  if(!reduce&&matchMedia('(hover:hover)').matches){
+    hero.addEventListener('pointermove',function(e){if(q)return;q=requestAnimationFrame(function(){q=0;
+      var r=scn.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)/(innerWidth/2),y=(e.clientY-r.top-r.height/2)/(innerHeight/2);
+      scn.style.setProperty('--px',Math.max(-1,Math.min(1,x)).toFixed(2));scn.style.setProperty('--py',Math.max(-1,Math.min(1,y)).toFixed(2))})});
+    hero.addEventListener('pointerleave',function(){scn.style.setProperty('--px',0);scn.style.setProperty('--py',0)});
+  }
+
+  if(reduce||!('IntersectionObserver' in window))return;
+  var h1=document.querySelector('h1');
+  h1.innerHTML=h1.textContent.split(' ').map(function(w,i){return '<span class="hw" style="animation-delay:'+(i*90)+'ms">'+w+'</span>'}).join(' ');
+
+  function count(el){var n=+el.getAttribute('data-n'),t0=null;
+    function f(t){if(!t0)t0=t;var p=Math.min((t-t0)/1400,1);el.textContent=Math.round(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)}
+    requestAnimationFrame(f)}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;
+    var el=e.target;io.unobserve(el);el.classList.add('in');
+    if(el.hasAttribute('data-n'))count(el);
+    if(el.classList.contains('rv'))setTimeout(function(){el.classList.remove('rv','in');el.style.transitionDelay=''},1100);
+  })},{threshold:.2});
+  document.querySelectorAll('.card,.steps div,.stats>div,details,blockquote,.contact,section h2').forEach(function(el){
+    el.classList.add('rv');
+    el.style.transitionDelay=(Array.prototype.indexOf.call(el.parentNode.children,el)%4*90)+'ms';
+    io.observe(el)});
+  document.querySelectorAll('[data-n]').forEach(function(el){el.textContent='0';io.observe(el)});
+  io.observe(document.querySelector('.steps'));
+})();
+</script>
+</body>
+</html>
